@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Available Workers - LabourLink</title>
+</head>
+
+<body>
+
+    <h1>LabourLink - Workers</h1>
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Skills</th>
+                <th>Experience</th>
+                <th>Expected Wage</th>
+                <th>Available</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr th:each="worker : ${workers}">
+
+                <td th:text="${worker.name}"></td>
+
+                <td th:text="${worker.phone}"></td>
+
+                <td th:text="${worker.location}"></td>
+
+                <td th:text="${worker.skills}"></td>
+
+                <td th:text="${worker.experience} + ' years'"></td>
+
+                <td th:text="'₹' + ${worker.expectedWage}"></td>
+
+                <td th:text="${worker.available ? 'Yes' : 'No'}"></td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a href="/">Back to Home</a>
+
+</body>
+
+</html>

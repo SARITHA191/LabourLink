@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Post a Job - LabourLink</title>
+</head>
+
+<body>
+
+    <h1>Post a Labour Requirement</h1>
+
+    <form th:action="@{/jobs/post}" th:object="${job}" method="post">
+
+        <label>Work Type:</label>
+        <input type="text" th:field="*{workType}" required>
+        <br><br>
+
+        <label>Workers Required:</label>
+        <input type="number" th:field="*{workersRequired}" min="1" required>
+        <br><br>
+
+        <label>Daily Wage:</label>
+        <input type="number" th:field="*{wage}" min="0" required>
+        <br><br>
+
+        <label>Location:</label>
+        <input type="text" th:field="*{location}" required>
+        <br><br>
+
+        <label>Work Date:</label>
+        <input type="date" th:field="*{workDate}" required>
+        <br><br>
+
+        <label>Start Time:</label>
+        <input type="time" th:field="*{startTime}" required>
+        <br><br>
+
+        <label>End Time:</label>
+        <input type="time" th:field="*{endTime}" required>
+        <br><br>
+
+        <label>Status:</label>
+        <select th:field="*{status}">
+            <option value="OPEN">Open</option>
+            <option value="CLOSED">Closed</option>
+        </select>
+        <br><br>
+
+        <label>Employer:</label>
+        <select name="employerId" required>
+
+            <option value="">-- Select Employer --</option>
+
+            <option th:each="employer : ${employers}" th:value="${employer.id}" th:text="${employer.name}">
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">Post Job</button>
+
+    </form>
+
+</body>
+
+</html>

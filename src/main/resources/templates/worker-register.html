@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Worker Registration - LabourLink</title>
+</head>
+
+<body>
+
+    <h1>Worker Registration</h1>
+
+    <form th:action="@{/workers/register}" th:object="${worker}" method="post">
+
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" required>
+        <br><br>
+
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}" required>
+        <br><br>
+
+        <label>Location:</label>
+        <input type="text" th:field="*{location}" required>
+        <br><br>
+
+        <label>Skills:</label>
+        <input type="text" th:field="*{skills}" required>
+        <br><br>
+
+        <label>Experience (years):</label>
+        <input type="number" th:field="*{experience}" min="0">
+        <br><br>
+
+        <label>Expected Daily Wage:</label>
+        <input type="number" th:field="*{expectedWage}" min="0">
+        <br><br>
+
+        <label>Available Today:</label>
+        <input type="checkbox" th:field="*{available}">
+        <br><br>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+</body>
+
+</html>
