@@ -2,54 +2,396 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Available Workers - LabourLink</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Workers | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background, #FFF8F2);
+            color: var(--text, #352820);
+            font-family: Arial, sans-serif;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #9B3D20, #E76F32);
+            color: white;
+            padding: 30px 6%;
+        }
+
+        .page-header a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+
+        .page-header h1 {
+            margin: 24px 0 8px;
+            font-size: 32px;
+        }
+
+        .page-header p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 16px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            background: white;
+            font-size: 15px;
+            outline-color: #E76F32;
+        }
+
+        .worker-count {
+            color: #82756D;
+            margin-bottom: 18px;
+        }
+
+        .worker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 22px;
+        }
+
+        .worker-card {
+            background: white;
+            border: 1px solid #F0DCCF;
+            border-radius: 16px;
+            padding: 23px;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, 0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(155, 61, 32, 0.13);
+        }
+
+        .worker-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .worker-avatar {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #FFF0E3;
+            color: #9B3D20;
+            display: grid;
+            place-items: center;
+            font-size: 25px;
+        }
+
+        .worker-name {
+            margin: 0 0 6px;
+            font-size: 19px;
+            overflow-wrap: anywhere;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .available {
+            color: #16845B;
+            background: #E5F6ED;
+        }
+
+        .unavailable {
+            color: #A33B35;
+            background: #FCE9E7;
+        }
+
+        .worker-details {
+            border-top: 1px solid #F3E6DD;
+            padding-top: 15px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 13px 0;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            color: #82756D;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            text-align: right;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .skills {
+            color: #9B3D20;
+        }
+
+        .wage {
+            font-size: 18px;
+            color: #9B3D20;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 20px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #F0DCCF;
+            color: #82756D;
+            grid-column: 1 / -1;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 28px 0;
+            color: #9B3D20;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                padding: 24px 20px;
+            }
+
+            .page-header h1 {
+                font-size: 26px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>LabourLink - Workers</h1>
+    <header class="page-header">
+        <a th:href="@{/employer/dashboard}">← Back to Dashboard</a>
+        <h1>Find the Right Workers</h1>
+        <p>Discover local workers and explore their skills, experience and expected wages.</p>
+    </header>
 
-    <table border="1">
+    <main class="container">
 
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Location</th>
-                <th>Skills</th>
-                <th>Experience</th>
-                <th>Expected Wage</th>
-                <th>Available</th>
-            </tr>
-        </thead>
 
-        <tbody>
+        <div class="toolbar">
+            <input type="search" id="workerSearch" placeholder="Search by name, skill or location..."
+                aria-label="Search workers">
 
-            <tr th:each="worker : ${workers}">
+            <select id="availabilityFilter" aria-label="Filter by availability">
+                <option value="all">All Workers</option>
+                <option value="yes">Available Only</option>
+                <option value="no">Unavailable Only</option>
+            </select>
 
-                <td th:text="${worker.name}"></td>
+            <select id="locationFilter" aria-label="Filter by location">
+                <option value="all">All Locations</option>
 
-                <td th:text="${worker.phone}"></td>
+                <option th:each="location : ${#lists.toList(
+        #sets.toSet(workers.![location])
+    )}" th:value="${location}" th:text="${location}">
+                </option>
+            </select>
 
-                <td th:text="${worker.location}"></td>
+            <select id="wageFilter" aria-label="Filter by maximum daily wage">
+                <option value="all">Any Daily Wage</option>
+                <option value="500">Up to ₹500</option>
+                <option value="700">Up to ₹700</option>
+                <option value="900">Up to ₹900</option>
+                <option value="1000">Up to ₹1000</option>
+            </select>
 
-                <td th:text="${worker.skills}"></td>
 
-                <td th:text="${worker.experience} + ' years'"></td>
+        </div>
 
-                <td th:text="'₹' + ${worker.expectedWage}"></td>
 
-                <td th:text="${worker.available ? 'Yes' : 'No'}"></td>
+        <p class="worker-count">
+            Workers listed:
+            <strong th:text="${#lists.size(workers)}">0</strong>
+        </p>
 
-            </tr>
+        <div class="worker-grid" id="workerGrid">
 
-        </tbody>
+            <article class="worker-card" th:each="worker : ${workers}">
 
-    </table>
+                <div class="worker-top">
+                    <div class="worker-avatar" aria-hidden="true">👷</div>
 
-    <br>
+                    <div>
+                        <h2 class="worker-name" th:text="${worker.name}">Worker Name</h2>
 
-    <a href="/">Back to Home</a>
+                        <span class="availability" th:classappend="${worker.available} ? ' available' : ' unavailable'"
+                            th:text="${worker.available} ? '● Available' : '● Unavailable'">
+                            Available
+                        </span>
+                    </div>
+                </div>
+
+                <div class="worker-details">
+
+                    <div class="detail">
+                        <span class="detail-label">📍 Location</span>
+                        <span class="detail-value" th:text="${worker.location}">Hyderabad</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">🛠 Skills</span>
+                        <span class="detail-value skills" th:text="${worker.skills}">Construction</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Experience</span>
+                        <span class="detail-value" th:text="${worker.experience} + ' years'">2 years</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">Expected wage</span>
+                        <span class="detail-value wage" th:text="'₹' + ${worker.expectedWage}">₹800</span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">📞 Phone</span>
+                        <span class="detail-value" th:text="${worker.phone}">Phone number</span>
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <a th:href="@{/workers/{id}/profile(id=${worker.id})}" style="display: block;
+              text-align: center;
+              padding: 12px;
+              background: #9B3D20;
+              color: white;
+              text-decoration: none;
+              border-radius: 10px;
+              font-weight: bold;">
+                        View Profile →
+                    </a>
+                </div>
+
+            </article>
+
+            <div class="empty-state" id="noWorkers" th:if="${#lists.isEmpty(workers)}">
+                <h3>No workers registered yet</h3>
+                <p>Registered workers will appear here.</p>
+            </div>
+
+            <div class="empty-state" id="noMatches" style="display: none;">
+                <h3>No matching workers found</h3>
+                <p>Try searching with a different name, skill or location.</p>
+            </div>
+
+        </div>
+
+        <a class="back-link" th:href="@{/employer/dashboard}">
+            ← Return to Employer Dashboard
+        </a>
+
+    </main>
+
+
+    <script>
+        const searchInput = document.getElementById("workerSearch");
+        const availabilityFilter = document.getElementById("availabilityFilter");
+        const locationFilter = document.getElementById("locationFilter");
+        const wageFilter = document.getElementById("wageFilter");
+        const workerCards = document.querySelectorAll(".worker-card");
+        const noMatches = document.getElementById("noMatches");
+
+        function filterWorkers() {
+            const query = searchInput.value.trim().toLowerCase();
+            const availability = availabilityFilter.value;
+            const location = locationFilter.value.toLowerCase();
+            const maxWage = wageFilter.value;
+            let visibleCount = 0;
+
+            workerCards.forEach(function (card) {
+                const text = card.textContent.toLowerCase();
+
+                const matchesSearch = text.includes(query);
+
+                const statusElement = card.querySelector(".availability");
+                const isAvailable = statusElement.classList.contains("available");
+
+                const matchesAvailability =
+                    availability === "all" ||
+                    (availability === "yes" && isAvailable) ||
+                    (availability === "no" && !isAvailable);
+                const workerLocation = card.querySelectorAll(".detail-value")[0]
+                    .textContent.trim().toLowerCase();
+
+                const matchesLocation =
+                    location === "all" || workerLocation === location;
+                const wageText = card.querySelectorAll(".detail-value")[3]
+                    .textContent.trim().replace(/[₹,\s]/g, "");
+
+                const workerWage = Number(wageText);
+
+                const matchesWage =
+                    maxWage === "all" ||
+                    (Number.isFinite(workerWage) && workerWage <= Number(maxWage));
+
+                const showCard =
+                    matchesSearch &&
+                    matchesAvailability &&
+                    matchesLocation &&
+                    matchesWage;
+
+                card.style.display = showCard ? "" : "none";
+
+                if (showCard) {
+                    visibleCount++;
+                }
+            });
+
+            noMatches.style.display =
+                workerCards.length > 0 && visibleCount === 0 ? "block" : "none";
+        }
+
+        searchInput.addEventListener("input", filterWorkers);
+        availabilityFilter.addEventListener("change", filterWorkers);
+        locationFilter.addEventListener("change", filterWorkers);
+        wageFilter.addEventListener("change", filterWorkers);
+    </script>
+
 
 </body>
 

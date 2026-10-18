@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #FFF8F2;
+            color: #352820;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 17px 7%;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #762D18;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px 40px;
+        }
+
+        .hero {
+            padding: 30px;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #FFE4D2, #FFF0DE);
+            border: 1px solid #F5D2BB;
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #FFFFFF;
+            color: #9B3D20;
+            border-radius: 20px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .hero h1 {
+            color: #762D18;
+            font-size: clamp(25px, 4vw, 34px);
+            margin: 15px 0 8px;
+        }
+
+        .hero p {
+            margin: 0;
+            line-height: 1.7;
+            color: #76594A;
+        }
+
+        .section-title {
+            color: #762D18;
+            font-size: 21px;
+            margin: 0 0 18px;
+        }
+
+        .table-card {
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, .06);
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: #FFF0E5;
+        }
+
+        th {
+            padding: 15px 13px;
+            color: #762D18;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 13px;
+            border-bottom: 1px solid #F3E4D9;
+            font-size: 14px;
+            color: #55463D;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #FFFAF6;
+        }
+
+        .job-name {
+            color: #352820;
+            font-weight: 700;
+        }
+
+        .wage {
+            color: #16845B;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #FFF2D6;
+            color: #966000;
+        }
+
+        .status-accepted {
+            background: #E4F6EB;
+            color: #16845B;
+        }
+
+        .status-rejected {
+            background: #FCE8E5;
+            color: #C0392B;
+        }
+
+        .status-other {
+            background: #F1E8E2;
+            color: #76594A;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 15px;
+        }
+
+        .empty-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            color: #762D18;
+            margin: 0 0 8px;
+        }
+
+        .empty-state p {
+            color: #82756D;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+
+        .primary-button {
+            background: #9B3D20;
+            color: #FFFFFF;
+        }
+
+        .primary-button:hover {
+            background: #762D18;
+            transform: translateY(-1px);
+        }
+
+        .secondary-button {
+            background: #FFF0E5;
+            color: #9B3D20;
+            border: 1px solid #F0DCCF;
+        }
+
+        .secondary-button:hover {
+            background: #FFE4D2;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 22px;
+                padding: 0 14px 30px;
+            }
+
+            .hero {
+                padding: 22px;
+            }
+
+            .table-card {
+                padding: 12px;
+            }
+
+            .actions .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="brand" th:href="@{/worker/dashboard}">
+            LabourLink<span style="color:#E76F32;">.</span>
+        </a>
+
+        <a class="nav-link" th:href="@{/worker/dashboard}">
+            ← Back to Dashboard
+        </a>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <span class="tag">YOUR JOB JOURNEY</span>
+
+            <h1>
+                My Applications
+            </h1>
+
+            <p>
+                Track your applications and check the latest status
+                of the jobs you have applied for.
+            </p>
+        </section>
+
+        <h2 class="section-title">
+            Applications for
+            <span th:text="${worker.name}">Worker</span>
+        </h2>
+
+        <section class="table-card">
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job</th>
+                            <th>Location</th>
+                            <th>Daily Wage</th>
+                            <th>Work Date</th>
+                            <th>Employer</th>
+                            <th>Application Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td>
+                                <span class="job-name" th:text="${app.job.workType}">
+                                    Construction Helper
+                                </span>
+                            </td>
+
+                            <td th:text="${app.job.location}">
+                                Deverakonda
+                            </td>
+
+                            <td>
+                                <span class="wage" th:text="'₹' + ${app.job.wage}">
+                                    ₹700
+                                </span>
+                            </td>
+
+                            <td th:text="${app.job.workDate}">
+                                2026-10-14
+                            </td>
+
+                            <td th:text="${app.job.employer != null ? app.job.employer.name : 'Not specified'}">
+                                Employer
+                            </td>
+
+                            <td>
+                                <span class="status"
+                                    th:classappend="${app.status != null and #strings.toUpperCase(app.status) == 'PENDING'} ? ' status-pending' : (${app.status != null and #strings.toUpperCase(app.status) == 'ACCEPTED'} ? ' status-accepted' : (${app.status != null and #strings.toUpperCase(app.status) == 'REJECTED'} ? ' status-rejected' : ' status-other'))"
+                                    th:text="${app.status != null ? app.status : 'Unknown'}">
+                                    PENDING
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📋</div>
+
+                                    <h3>No applications yet</h3>
+
+                                    <p>
+                                        You haven't applied for any jobs yet.
+                                        Explore available opportunities and
+                                        submit your first application.
+                                    </p>
+
+                                    <a class="button primary-button" th:href="@{/workers/{id}/jobs(id=${worker.id})}">
+                                        Explore Jobs →
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="actions">
+                <a class="button primary-button" th:href="@{/workers/{id}/jobs(id=${worker.id})}">
+                    Find More Jobs →
+                </a>
+
+                <a class="button secondary-button" th:href="@{/worker/dashboard}">
+                    Back to Dashboard
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        © LabourLink · Connecting workers with opportunities.
+    </footer>
+
+</body>
+
+</html>

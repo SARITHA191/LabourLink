@@ -1,66 +1,399 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Post a Job - LabourLink</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #FFF8F2;
+            color: #352820;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 17px 6%;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .brand span {
+            color: #E76F32;
+        }
+
+        .nav-link {
+            color: #9B3D20;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            color: #C65322;
+        }
+
+        .page-container {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 20px 35px;
+        }
+
+        .intro {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 7px 13px;
+            border-radius: 30px;
+            background: #FFE7D6;
+            color: #9B3D20;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .intro h1 {
+            margin: 16px 0 10px;
+            color: #76351F;
+            font-size: clamp(27px, 4vw, 36px);
+            letter-spacing: -0.7px;
+        }
+
+        .intro p {
+            max-width: 540px;
+            margin: 0 auto;
+            color: #82756D;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .form-card {
+            overflow: hidden;
+            border: 1px solid #F0DCCF;
+            border-radius: 18px;
+            background: #FFFFFF;
+            box-shadow: 0 10px 30px rgba(155, 61, 32, 0.07);
+        }
+
+        .form-header {
+            padding: 23px 30px;
+            border-bottom: 1px solid #F4E5DA;
+            background: linear-gradient(120deg, #FFF0E4, #FFFAF5);
+        }
+
+        .form-header h2 {
+            margin: 0 0 7px;
+            color: #76351F;
+            font-size: 19px;
+        }
+
+        .form-header p {
+            margin: 0;
+            color: #82756D;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .job-form {
+            padding: 28px 30px 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0 20px;
+        }
+
+        .form-group {
+            min-width: 0;
+            margin-bottom: 19px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #49372D;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: #D96530;
+        }
+
+        .form-group input,
+        .form-group select {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            padding: 12px 13px;
+            border: 1px solid #E9D8CC;
+            border-radius: 9px;
+            outline: none;
+            background: #FFFCF9;
+            color: #352820;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #E98246;
+            box-shadow: 0 0 0 3px rgba(233, 130, 70, 0.13);
+            background: #FFFFFF;
+        }
+
+        .form-group input::placeholder {
+            color: #B0A197;
+        }
+
+        .field-hint {
+            display: block;
+            margin-top: 7px;
+            color: #958479;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .form-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            margin-top: 8px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #E98246;
+            color: #FFFFFF;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .submit-button:hover {
+            background: #D96530;
+            transform: translateY(-1px);
+        }
+
+        .back-link {
+            display: block;
+            padding: 12px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            background: #FFF8F2;
+            color: #9B3D20;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            background: #FFEBDD;
+        }
+
+        .footer {
+            padding: 20px;
+            border-top: 1px solid #F0DCCF;
+            background: #FFFFFF;
+            color: #958479;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            .page-container {
+                margin-top: 25px;
+                padding: 0 13px 28px;
+            }
+
+            .form-header {
+                padding: 21px;
+            }
+
+            .job-form {
+                padding: 22px 19px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Post a Labour Requirement</h1>
+    <header class="navbar">
+        <a class="brand" th:href="@{/}">
+            <span>LabourLink</span>
+        </a>
 
-    <form th:action="@{/jobs/post}" th:object="${job}" method="post">
+        <a class="nav-link" th:href="@{/employer/dashboard}">
+            ← Back to Dashboard
+        </a>
+    </header>
 
-        <label>Work Type:</label>
-        <input type="text" th:field="*{workType}" required>
-        <br><br>
+    <main class="page-container">
 
-        <label>Workers Required:</label>
-        <input type="number" th:field="*{workersRequired}" min="1" required>
-        <br><br>
+        <section class="intro">
+            <span class="eyebrow">Employer Workspace</span>
 
-        <label>Daily Wage:</label>
-        <input type="number" th:field="*{wage}" min="0" required>
-        <br><br>
+            <h1>Post a Labour Requirement</h1>
 
-        <label>Location:</label>
-        <input type="text" th:field="*{location}" required>
-        <br><br>
+            <p>
+                Need workers for your next project? Share the job details
+                and connect with local workers looking for opportunities.
+            </p>
+        </section>
 
-        <label>Work Date:</label>
-        <input type="date" th:field="*{workDate}" required>
-        <br><br>
+        <section class="form-card">
 
-        <label>Start Time:</label>
-        <input type="time" th:field="*{startTime}" required>
-        <br><br>
+            <div class="form-header">
+                <h2>📝 Job Details</h2>
+                <p>Fill in the information below to publish your job listing.</p>
+            </div>
 
-        <label>End Time:</label>
-        <input type="time" th:field="*{endTime}" required>
-        <br><br>
+            <form class="job-form" th:action="@{/jobs/post}" th:object="${job}" method="post">
 
-        <label>Status:</label>
-        <select th:field="*{status}">
-            <option value="OPEN">Open</option>
-            <option value="CLOSED">Closed</option>
-        </select>
-        <br><br>
+                <div class="form-grid">
 
-        <label>Employer:</label>
-        <select name="employerId" required>
+                    <div class="form-group full-width">
+                        <label for="workType">
+                            Type of Work <span class="required">*</span>
+                        </label>
 
-            <option value="">-- Select Employer --</option>
+                        <input id="workType" type="text" th:field="*{workType}"
+                            placeholder="e.g. Construction Helper, Farming, Painting" required>
+                    </div>
 
-            <option th:each="employer : ${employers}" th:value="${employer.id}" th:text="${employer.name}">
-            </option>
+                    <div class="form-group">
+                        <label for="workersRequired">
+                            Number of Workers <span class="required">*</span>
+                        </label>
 
-        </select>
+                        <input id="workersRequired" type="number" th:field="*{workersRequired}" min="1"
+                            placeholder="e.g. 5" required>
+                    </div>
 
-        <br><br>
+                    <div class="form-group">
+                        <label for="wage">
+                            Daily Wage (₹) <span class="required">*</span>
+                        </label>
 
-        <button type="submit">Post Job</button>
+                        <input id="wage" type="number" th:field="*{wage}" min="0" step="0.01" placeholder="e.g. 700"
+                            required>
 
-    </form>
+                        <span class="field-hint">
+                            Enter the wage offered per worker for one day.
+                        </span>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="location">
+                            Work Location <span class="required">*</span>
+                        </label>
+
+                        <input id="location" type="text" th:field="*{location}"
+                            placeholder="Enter village, town, or area" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="workDate">
+                            Work Date <span class="required">*</span>
+                        </label>
+
+                        <input id="workDate" type="date" th:field="*{workDate}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Job Status</label>
+
+                        <select id="status" th:field="*{status}">
+                            <option value="OPEN">Open — Accepting Workers</option>
+                            <option value="CLOSED">Closed — Not Accepting</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime">
+                            Starting Time <span class="required">*</span>
+                        </label>
+
+                        <input id="startTime" type="time" th:field="*{startTime}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime">
+                            Ending Time <span class="required">*</span>
+                        </label>
+
+                        <input id="endTime" type="time" th:field="*{endTime}" required>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button class="submit-button" type="submit">
+                        Publish Job Listing →
+                    </button>
+
+                    <a class="back-link" th:href="@{/employer/dashboard}">
+                        Cancel and Return to Dashboard
+                    </a>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 LabourLink · Connecting local workers with opportunities
+    </footer>
 
 </body>
 

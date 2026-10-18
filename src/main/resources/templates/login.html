@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, #FFE1C5, transparent 42%),
+                linear-gradient(135deg, #FFF8F2, #FCEBDD);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-layout {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #FFFFFF;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(118, 45, 24, 0.14);
+        }
+
+        .login-welcome {
+            background: linear-gradient(145deg, #9B3D20, #762D18);
+            color: white;
+            padding: 55px 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-welcome::before,
+        .login-welcome::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .login-welcome::before {
+            width: 270px;
+            height: 270px;
+            top: -110px;
+            right: -90px;
+        }
+
+        .login-welcome::after {
+            width: 200px;
+            height: 200px;
+            bottom: -90px;
+            left: -70px;
+        }
+
+        .brand {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand span {
+            color: #FFB45B;
+        }
+
+        .welcome-tag {
+            display: inline-block;
+            width: fit-content;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.13);
+            color: #FFE1C5;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-welcome h1 {
+            font-size: clamp(30px, 4vw, 43px);
+            line-height: 1.2;
+            margin: 0 0 18px;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-welcome>p {
+            color: #F9DED0;
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 0;
+            max-width: 360px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-points {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-points li {
+            margin: 17px 0;
+            color: #FFFFFF;
+            font-size: 14px;
+        }
+
+        .welcome-points li span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 180, 91, 0.2);
+            color: #FFCA86;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .login-form-side {
+            padding: 48px 42px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-heading {
+            margin-bottom: 28px;
+        }
+
+        .form-heading h2 {
+            color: #352820;
+            font-size: 28px;
+            margin: 0 0 9px;
+        }
+
+        .form-heading p {
+            color: #82756D;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .field-label {
+            display: block;
+            color: #352820;
+            font-weight: 700;
+            font-size: 13px;
+            margin: 18px 0 8px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #9B3D20;
+            pointer-events: none;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 14px 14px 14px 43px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            background: #FFFCF9;
+            color: #352820;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: #E76F32;
+            box-shadow: 0 0 0 3px rgba(231, 111, 50, 0.13);
+        }
+
+        .role-label {
+            display: block;
+            color: #352820;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .role-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .role-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 8px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            background: #FFFCF9;
+            color: #5B463A;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .role-option:has(input:checked) {
+            border-color: #9B3D20;
+            background: #FFF0E5;
+            color: #9B3D20;
+            box-shadow: 0 0 0 1px #9B3D20;
+        }
+
+        .role-option input {
+            accent-color: #9B3D20;
+            margin: 0;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 18px 0 0;
+            text-align: center;
+        }
+
+        .error-message {
+            background: #FFF0EF;
+            color: #B42318;
+            border: 1px solid #F5C5C1;
+        }
+
+        .success-message {
+            background: #EAF8F0;
+            color: #16845B;
+            border: 1px solid #B8E6CC;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #9B3D20, #C65322);
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 7px 16px rgba(155, 61, 32, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(155, 61, 32, 0.28);
+        }
+
+        .register-links {
+            text-align: center;
+            margin-top: 25px;
+            color: #82756D;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .register-links a {
+            color: #9B3D20;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-links a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .security-note {
+            text-align: center;
+            margin-top: 22px;
+            color: #97877D;
+            font-size: 11px;
+        }
+
+        @media (max-width: 760px) {
+            .login-layout {
+                max-width: 470px;
+                grid-template-columns: 1fr;
+            }
+
+            .login-welcome {
+                padding: 30px 28px;
+            }
+
+            .brand {
+                font-size: 27px;
+                margin-bottom: 20px;
+            }
+
+            .login-welcome h1 {
+                font-size: 30px;
+            }
+
+            .welcome-points {
+                display: grid;
+                grid-template-columns: 1fr;
+                margin-top: 16px;
+            }
+
+            .welcome-points li {
+                margin: 8px 0;
+            }
+
+            .login-form-side {
+                padding: 32px 25px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding: 12px;
+            }
+
+            .login-form-side {
+                padding: 27px 18px;
+            }
+
+            .role-options {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-layout">
+
+        <section class="login-welcome">
+            <div class="brand">Labour<span>Link</span></div>
+
+            <div class="welcome-tag">Your next opportunity starts here</div>
+
+            <h1>Good work.<br>Better opportunities.</h1>
+
+            <p>
+                Connect with local employment opportunities or find
+                reliable workers for your next project.
+            </p>
+
+            <ul class="welcome-points">
+                <li><span>✓</span> Find local work opportunities</li>
+                <li><span>✓</span> Connect with employers and workers</li>
+                <li><span>✓</span> Manage job applications easily</li>
+            </ul>
+        </section>
+
+        <section class="login-form-side">
+            <div class="form-heading">
+                <h2>Welcome back!</h2>
+                <p>Sign in to continue to your LabourLink account.</p>
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <span class="role-label">I want to log in as</span>
+
+                <div class="role-options">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="WORKER" checked>
+                        <span>👷 Worker</span>
+                    </label>
+
+                    <label class="role-option">
+                        <input type="radio" name="role" value="EMPLOYER">
+                        <span>🏢 Employer</span>
+                    </label>
+                </div>
+
+                <label class="field-label" for="username">Email address</label>
+                <div class="input-wrap">
+                    <span class="field-icon" aria-hidden="true"></span>
+                    <input type="email" id="username" name="username" placeholder="you@example.com"
+                        autocomplete="username" required>
+                </div>
+
+                <label class="field-label" for="password">Password</label>
+                <div class="input-wrap">
+                    <span class="field-icon" aria-hidden="true"></span>
+                    <input type="password" id="password" name="password" placeholder="Enter your password"
+                        autocomplete="current-password" required>
+                </div>
+
+                <p class="message error-message" th:if="${param.error}">
+                    Invalid email or password. Please try again.
+                </p>
+
+                <p class="message success-message" th:if="${param.logout}">
+                    You have logged out successfully.
+                </p>
+
+                <button type="submit" class="login-button">
+                    Sign In →
+                </button>
+            </form>
+
+            <div class="register-links">
+                <div>New to LabourLink?</div>
+                <a th:href="@{/workers/register}">Register as Worker</a>
+                <span> | </span>
+                <a th:href="@{/employers/register}">Register as Employer</a>
+
+                <div>
+                    <a class="back-home" th:href="@{/}">← Back to Home</a>
+                </div>
+            </div>
+
+            <div class="security-note">
+                LabourLink · Connecting people with opportunities
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>

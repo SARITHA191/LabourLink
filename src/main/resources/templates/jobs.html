@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Find Jobs | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #FFF8F2;
+            color: #352820;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 18px 7%;
+            background: #fff;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #5D463A;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #E76F32;
+        }
+
+        .page-container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 35px auto;
+            min-height: 60vh;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+            color: #9B3D20;
+            font-size: 34px;
+        }
+
+        .page-heading p {
+            color: #82756D;
+            line-height: 1.6;
+        }
+
+        .message {
+            display: block;
+            padding: 16px 18px;
+            margin: 18px 0;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+
+        .success-message {
+            color: #176B39;
+            background: #E5F7EB;
+            border-color: #B9E8C7;
+        }
+
+        .warning-message {
+            color: #805500;
+            background: #FFF2D6;
+            border-color: #F0D99D;
+        }
+
+        .error-message {
+            color: #9B2525;
+            background: #FDE8E7;
+            border-color: #F3C2BF;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .job-card {
+            padding: 24px;
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 16px;
+            box-shadow:
+                0 8px 24px rgba(155, 61, 32, 0.07);
+            transition: transform 0.2s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .job-card h2 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #9B3D20;
+            font-size: 23px;
+            overflow-wrap: anywhere;
+        }
+
+        .job-status {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            color: #176B39;
+            background: #E5F7EB;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .job-status.closed {
+            color: #9B2525;
+            background: #FDE8E7;
+        }
+
+        .job-detail {
+            margin: 12px 0;
+            color: #65564D;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .job-detail strong {
+            color: #352820;
+        }
+
+        .primary-button,
+        .secondary-button {
+            display: block;
+            width: 100%;
+            padding: 13px 16px;
+            margin-top: 15px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            color: #FFFFFF;
+            background: #E76F32;
+            border: none;
+        }
+
+        .primary-button:hover {
+            background: #C65322;
+        }
+
+        .secondary-button {
+            color: #9B3D20;
+            background: #FFF0E5;
+            border: 1px solid #F0DCCF;
+        }
+
+        .empty-state {
+            padding: 35px 20px;
+            background: #FFFFFF;
+            border: 1px dashed #E6C7B5;
+            border-radius: 14px;
+            color: #82756D;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .footer {
+            padding: 25px 15px;
+            margin-top: 50px;
+            color: #82756D;
+            text-align: center;
+            border-top: 1px solid #F0DCCF;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .page-container {
+                width: 90%;
+                margin-top: 25px;
+            }
+
+            .page-heading h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <a class="brand" th:href="@{/}">LabourLink</a>
+
+        <div class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/jobs}">Find Jobs</a>
+
+            <a th:if="${isEmployer}" th:href="@{/employer/dashboard}">
+                Dashboard
+            </a>
+
+            <a th:unless="${isEmployer}" th:href="@{/worker/dashboard}">
+                Dashboard
+            </a>
+
+            <a th:if="${!isEmployer}" th:href="@{/worker/profile}">
+                My Profile
+            </a>
+
+            <a th:if="${!isEmployer and workerId != null}" th:href="@{/workers/{id}/applications(id=${workerId})}">
+                My Applications
+            </a>
+
+            <a th:if="${isEmployer}" th:href="@{/jobs/post}">
+                Post a Job
+            </a>
+
+            <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
+                <button type="submit"
+                    style="background:none; border:none; color:#5D463A; font-weight:600; cursor:pointer; font-size:15px;">
+                    Logout
+                </button>
+            </form>
+        </div>
+
+    </nav>
+
+    <main class="page-container">
+
+        <div class="page-heading">
+            <h1 th:if="${isEmployer}">Manage Your Job Postings</h1>
+            <h1 th:unless="${isEmployer}">Find Your Next Job</h1>
+
+            <p th:if="${isEmployer}">
+                Review your posted jobs and manage the people who apply.
+            </p>
+
+            <p th:unless="${isEmployer}">
+                Discover local work opportunities and apply for jobs
+                that match your skills.
+            </p>
+        </div>
+
+        <!-- Application success -->
+        <div th:if="${applicationSuccess}" class="message success-message">
+            <strong>✓ Application submitted successfully!</strong>
+            Your application has been recorded. Visit My Applications
+            to check its status.
+        </div>
+
+        <!-- Duplicate application -->
+        <div th:if="${applicationDuplicate}" class="message warning-message">
+            <strong>You have already applied for this job.</strong>
+            You can apply to other available jobs.
+        </div>
+
+        <!-- Closed job -->
+        <div th:if="${applicationClosed}" class="message warning-message">
+            This job is no longer open for applications.
+        </div>
+
+        <!-- Job not found -->
+        <div th:if="${jobNotFound}" class="message error-message">
+            This job could not be found. Please refresh the page.
+        </div>
+
+        <!-- Job posted -->
+        <div th:if="${jobPosted}" class="message success-message">
+            <strong>✓ Job posted successfully!</strong>
+            Your job is now listed below.
+        </div>
+
+        <!-- Access denied -->
+        <div th:if="${accessDenied}" class="message error-message">
+            You do not have permission to perform that action.
+        </div>
+
+        <!-- Job cards -->
+        <div class="jobs-grid" th:if="${jobs != null and !jobs.isEmpty()}">
+
+            <div class="job-card" th:each="job : ${jobs}">
+
+                <h2 th:text="${job.workType}">
+                    Construction Helper
+                </h2>
+
+                <span class="job-status" th:if="${job.status != null and #strings.toUpperCase(job.status) == 'OPEN'}">
+                    OPEN
+                </span>
+
+                <span class="job-status closed"
+                    th:unless="${job.status != null and #strings.toUpperCase(job.status) == 'OPEN'}"
+                    th:text="${job.status != null ? job.status : 'CLOSED'}">
+                    CLOSED
+                </span>
+
+                <p class="job-detail">
+                    <strong>Location:</strong>
+                    <span th:text="${job.location}">Hyderabad</span>
+                </p>
+
+                <p class="job-detail">
+                    <strong>Daily Wage:</strong>
+                    ₹<span th:text="${job.wage}">700</span>
+                </p>
+
+                <p class="job-detail">
+                    <strong>Workers Required:</strong>
+                    <span th:text="${job.workersRequired}">5</span>
+                </p>
+
+                <p class="job-detail">
+                    <strong>Work Date:</strong>
+                    <span th:text="${job.workDate != null ? job.workDate : 'Not specified'}">
+                        Not specified
+                    </span>
+                </p>
+
+                <p class="job-detail">
+                    <strong>Start Time:</strong>
+                    <span th:text="${job.startTime != null ? job.startTime : 'Not specified'}">
+                        Not specified
+                    </span>
+                </p>
+
+                <p class="job-detail">
+                    <strong>End Time:</strong>
+                    <span th:text="${job.endTime != null ? job.endTime : 'Not specified'}">
+                        Not specified
+                    </span>
+                </p>
+
+                <!-- Workers can apply to open jobs -->
+                <form th:if="${!isEmployer and job.status != null and #strings.toUpperCase(job.status) == 'OPEN'}"
+                    th:action="@{/applications/apply}" method="post" style="margin:0;">
+
+                    <input type="hidden" name="jobId" th:value="${job.id}">
+
+                    <button type="submit" class="primary-button">
+                        Apply for This Job →
+                    </button>
+                </form>
+
+                <!-- Employers can manage their applicants -->
+
+                <!-- Employers can manage their applicants -->
+                <a th:if="${isEmployer}" th:href="@{/jobs/{id}/applicants(id=${job.id})}" class="secondary-button">
+                    View Applicants
+                </a>
+
+                <!-- Employers can mark open jobs as completed -->
+                <form th:if="${isEmployer
+             and job.status != null
+             and #strings.toUpperCase(job.status) != 'COMPLETED'}" th:action="@{/jobs/{id}/complete(id=${job.id})}"
+                    method="post" style="margin: 0;">
+
+                    <button type="submit" class="primary-button"
+                        onclick="return confirm('Are you sure you want to mark this job as completed?');">
+                        ✓ Mark as Completed
+                    </button>
+                </form>
+
+
+                <p th:if="${!isEmployer and (job.status == null or #strings.toUpperCase(job.status) != 'OPEN')}"
+                    class="job-detail">
+                    Applications are currently closed for this job.
+                </p>
+
+            </div>
+        </div>
+
+        <!-- Empty job list -->
+        <div class="empty-state" th:if="${jobs == null or jobs.isEmpty()}">
+
+            <h2 th:if="${isEmployer}">You haven't posted any jobs yet</h2>
+            <h2 th:unless="${isEmployer}">No jobs available right now</h2>
+
+            <p th:if="${isEmployer}">
+                Post your first job to start receiving applications.
+            </p>
+
+            <p th:unless="${isEmployer}">
+                Please check again later for new local opportunities.
+            </p>
+
+            <a th:if="${isEmployer}" th:href="@{/jobs/post}" class="secondary-button"
+                style="max-width:260px; margin:20px auto;">
+                + Post Your First Job
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 LabourLink · Connecting workers with opportunities
+    </footer>
+
+</body>
+
+</html>

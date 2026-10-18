@@ -11,17 +11,18 @@ public class Worker {
     private Long id;
 
     private String name;
-
     private String phone;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
     private String location;
-
     private String skills;
-
     private int experience;
-
     private double expectedWage;
-
     private boolean available;
 
     public Worker() {
@@ -49,6 +50,22 @@ public class Worker {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getLocation() {

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Applicants | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #FFF8F2;
+            color: #352820;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 17px 7%;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #762D18;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px 40px;
+        }
+
+        .hero {
+            padding: 30px;
+            border: 1px solid #F5D2BB;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #FFE4D2, #FFF0DE);
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #FFFFFF;
+            color: #9B3D20;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .hero h1 {
+            margin: 15px 0 8px;
+            color: #762D18;
+            font-size: clamp(26px, 4vw, 34px);
+        }
+
+        .hero p {
+            margin: 0;
+            color: #76594A;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            margin: 0 0 17px;
+            color: #762D18;
+            font-size: 21px;
+        }
+
+        .job-card {
+            margin-bottom: 28px;
+            padding: 25px;
+            border: 1px solid #F0DCCF;
+            border-radius: 17px;
+            background: #FFFFFF;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, .06);
+        }
+
+        .job-heading {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .job-icon {
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: #FFF0E5;
+            font-size: 25px;
+        }
+
+        .job-heading h2 {
+            margin: 2px 0 7px;
+            color: #762D18;
+            font-size: 22px;
+        }
+
+        .job-heading p {
+            margin: 0;
+            color: #82756D;
+            font-size: 14px;
+        }
+
+        .job-details {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .detail {
+            padding: 15px;
+            border: 1px solid #F3E4D9;
+            border-radius: 12px;
+            background: #FFFAF6;
+            min-width: 0;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #82756D;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            color: #352820;
+            font-size: 15px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .wage {
+            color: #16845B;
+        }
+
+        .applicants-card {
+            overflow: hidden;
+            border: 1px solid #F0DCCF;
+            border-radius: 17px;
+            background: #FFFFFF;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, .05);
+        }
+
+        .applicants-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 22px 24px;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .applicants-header h2 {
+            margin: 0;
+            color: #762D18;
+            font-size: 21px;
+        }
+
+        .applicants-header p {
+            margin: 6px 0 0;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 950px;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background: #FFF0E5;
+        }
+
+        th {
+            padding: 15px 13px;
+            color: #762D18;
+            font-size: 11px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 13px;
+            border-bottom: 1px solid #F3E4D9;
+            color: #55463D;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #FFFAF6;
+        }
+
+        .worker-name {
+            color: #352820;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .worker-location {
+            display: block;
+            margin-top: 5px;
+            color: #82756D;
+            font-size: 12px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #FFF2D6;
+            color: #966000;
+        }
+
+        .status-accepted {
+            background: #E4F6EB;
+            color: #16845B;
+        }
+
+        .status-rejected {
+            background: #FCE8E5;
+            color: #C0392B;
+        }
+
+        .status-other {
+            background: #F1E8E2;
+            color: #76594A;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .action-form {
+            margin: 0;
+        }
+
+        .action-button {
+            padding: 9px 11px;
+            border: none;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .accept {
+            background: #16845B;
+        }
+
+        .accept:hover {
+            background: #116844;
+        }
+
+        .reject {
+            background: #D64545;
+        }
+
+        .reject:hover {
+            background: #B83232;
+        }
+
+        .recorded {
+            color: #82756D;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .empty {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            margin-bottom: 12px;
+            font-size: 42px;
+        }
+
+        .empty h3 {
+            margin: 0 0 8px;
+            color: #762D18;
+        }
+
+        .empty p {
+            margin: 0;
+            color: #82756D;
+            line-height: 1.6;
+        }
+
+        .footer-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .primary-button {
+            background: #9B3D20;
+            border-color: #9B3D20;
+            color: #FFFFFF;
+        }
+
+        .primary-button:hover {
+            background: #762D18;
+        }
+
+        .secondary-button {
+            background: #FFF0E5;
+            color: #9B3D20;
+        }
+
+        .secondary-button:hover {
+            background: #FFE4D2;
+        }
+
+        footer {
+            padding: 22px;
+            color: #82756D;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .job-details {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                margin-top: 22px;
+                padding: 0 14px 30px;
+            }
+
+            .hero,
+            .job-card {
+                padding: 21px;
+            }
+
+            .job-details {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-actions .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="brand" th:href="@{/employer/dashboard}">
+            LabourLink<span style="color:#E76F32;">.</span>
+        </a>
+
+        <a class="nav-link" th:href="@{/employer/dashboard}">
+            ← Back to Dashboard
+        </a>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <span class="tag">EMPLOYER WORKSPACE</span>
+            <h1>Job Applicants</h1>
+            <p>
+                Review worker profiles, compare experience and skills,
+                and manage applications for your job opportunities.
+            </p>
+        </section>
+
+        <h2 class="section-title">Job Details</h2>
+
+        <section class="job-card">
+
+            <div class="job-heading">
+                <div class="job-icon">🧰</div>
+
+                <div>
+                    <h2 th:text="${job.workType}">Construction Helper</h2>
+                    <p>
+                        Review applicants for this work opportunity.
+                    </p>
+                </div>
+            </div>
+
+            <div class="job-details">
+
+                <div class="detail">
+                    <span class="detail-label">Location</span>
+                    <span class="detail-value" th:text="${job.location}">Deverakonda</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Daily Wage</span>
+                    <span class="detail-value wage" th:text="'₹' + ${job.wage}">₹700</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Workers Required</span>
+                    <span class="detail-value" th:text="${job.workersRequired}">3</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Work Date</span>
+                    <span class="detail-value" th:text="${job.workDate}">Work date</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="applicants-card">
+
+            <div class="applicants-header">
+                <div>
+                    <h2>Applicants</h2>
+                    <p>Review applications and record your decision.</p>
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Worker</th>
+                            <th>Phone</th>
+                            <th>Skills</th>
+                            <th>Experience</th>
+                            <th>Expected Wage</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+
+                            <td>
+                                <span class="worker-name" th:text="${app.worker.name}">
+                                    Worker Name
+                                </span>
+                                <span class="worker-location" th:text="${app.worker.location}">
+                                    Worker Location
+                                </span>
+                            </td>
+
+                            <td th:text="${app.worker.phone}">
+                                Phone number
+                            </td>
+
+                            <td th:text="${app.worker.skills}">
+                                Worker skills
+                            </td>
+
+                            <td>
+                                <span th:text="${app.worker.experience}">
+                                    3
+                                </span>
+                                years
+                            </td>
+
+                            <td>
+                                <span class="wage"
+                                    th:text="${app.worker.expectedWage != null ? '₹' + app.worker.expectedWage : 'Not specified'}">
+                                    ₹700
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="status"
+                                    th:classappend="${app.status != null and #strings.toUpperCase(app.status) == 'PENDING'} ? ' status-pending' : (${app.status != null and #strings.toUpperCase(app.status) == 'ACCEPTED'} ? ' status-accepted' : (${app.status != null and #strings.toUpperCase(app.status) == 'REJECTED'} ? ' status-rejected' : ' status-other'))"
+                                    th:text="${app.status != null ? app.status : 'Unknown'}">
+                                    PENDING
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="action-buttons"
+                                    th:if="${app.status != null and #strings.toUpperCase(app.status) == 'PENDING'}">
+
+                                    <form class="action-form" th:action="@{/applications/{id}/accept(id=${app.id})}"
+                                        method="post">
+
+                                        <button type="submit" class="action-button accept">
+                                            ✓ Accept
+                                        </button>
+                                    </form>
+
+                                    <form class="action-form" th:action="@{/applications/{id}/reject(id=${app.id})}"
+                                        method="post">
+
+                                        <button type="submit" class="action-button reject">
+                                            ✕ Reject
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                                <span class="recorded"
+                                    th:if="${app.status == null or #strings.toUpperCase(app.status) != 'PENDING'}">
+                                    Decision recorded
+                                </span>
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="7">
+                                <div class="empty">
+                                    <div class="empty-icon">👥</div>
+                                    <h3>No applicants yet</h3>
+                                    <p>
+                                        No workers have applied for this job yet.
+                                        Check back when applications arrive.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <div class="footer-actions">
+            <a class="button primary-button" th:href="@{/jobs}">
+                ← Back to Jobs
+            </a>
+
+            <a class="button secondary-button" th:href="@{/employer/dashboard}">
+                Employer Dashboard
+            </a>
+        </div>
+
+    </main>
+
+    <footer>
+        © LabourLink · Connecting workers with opportunities.
+    </footer>
+
+</body>
+
+</html>

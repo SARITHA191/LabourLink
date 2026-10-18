@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile | LabourLink</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #FFF8F2;
+            color: #352820;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #9B3D20, #E76F32);
+            color: white;
+            padding: 28px 6%;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .header h1 {
+            margin: 22px 0 8px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #F0DCCF;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, .08);
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #FFF0E5;
+            font-size: 34px;
+            margin-bottom: 16px;
+        }
+
+        .name {
+            color: #762D18;
+            margin-bottom: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .detail {
+            background: #FFFAF6;
+            border: 1px solid #F3E4D9;
+            border-radius: 12px;
+            padding: 16px;
+            min-width: 0;
+        }
+
+        .label {
+            display: block;
+            color: #82756D;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .value {
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .wide {
+            grid-column: 1 / -1;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .yes {
+            background: #E5F6ED;
+            color: #16845B;
+        }
+
+        .no {
+            background: #FCE9E7;
+            color: #A33B35;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 12px 18px;
+            background: #9B3D20;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 550px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wide {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <a th:href="@{/workers}">← Back to Browse Workers</a>
+        <h1>Worker Profile</h1>
+        <p>Review this worker's skills and experience.</p>
+    </header>
+
+    <main class="container">
+        <section class="card">
+
+            <div class="avatar">👷</div>
+
+            <h2 class="name" th:text="${worker.name}">Worker Name</h2>
+            <p>Worker information registered on LabourLink.</p>
+
+            <div class="grid">
+
+                <div class="detail">
+                    <span class="label">Location</span>
+                    <div class="value" th:text="${worker.location}">Location</div>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Phone</span>
+                    <div class="value" th:text="${worker.phone}">Phone</div>
+                </div>
+
+                <div class="detail wide">
+                    <span class="label">Skills</span>
+                    <div class="value" th:text="${worker.skills}">Skills</div>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Experience</span>
+                    <div class="value"
+                        th:text="${worker.experience != null ? worker.experience + ' years' : 'Not specified'}">
+                        Experience
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Expected Daily Wage</span>
+                    <div class="value"
+                        th:text="${worker.expectedWage != null ? '₹' + worker.expectedWage : 'Not specified'}">
+                        Wage
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Availability</span>
+                    <span class="badge" th:classappend="${worker.available} ? ' yes' : ' no'"
+                        th:text="${worker.available} ? 'Available' : 'Unavailable'">
+                        Availability
+                    </span>
+                </div>
+
+            </div>
+
+
+            <a class="button" th:href="'tel:' + ${worker.phone}">
+                📞 Contact Worker
+            </a>
+
+            <a class="button" th:href="@{/workers}">
+                ← Back to Workers
+            </a>
+
+        </section>
+    </main>
+
+</body>
+
+</html>

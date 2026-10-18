@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Worker Profile | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #FFF8F2;
+            color: #352820;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background: #FFFFFF;
+            border-bottom: 1px solid #F0DCCF;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #762D18;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .page {
+            max-width: 950px;
+            margin: 38px auto;
+            padding: 0 20px 40px;
+        }
+
+        .welcome {
+            padding: 30px;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #FFE4D2, #FFF0DE);
+            border: 1px solid #F5D2BB;
+            margin-bottom: 25px;
+        }
+
+        .welcome-tag {
+            display: inline-block;
+            background: #FFFFFF;
+            color: #9B3D20;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .welcome h1 {
+            margin: 15px 0 8px;
+            font-size: clamp(26px, 4vw, 36px);
+            color: #762D18;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #76594A;
+            line-height: 1.7;
+        }
+
+        .profile-card {
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, 0.07);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .section-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: #FFF0E5;
+            display: grid;
+            place-items: center;
+            font-size: 23px;
+        }
+
+        .section-heading h2 {
+            color: #762D18;
+            margin: 0 0 5px;
+            font-size: 21px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .detail {
+            background: #FFFAF6;
+            border: 1px solid #F3E4D9;
+            border-radius: 12px;
+            padding: 17px;
+            min-width: 0;
+        }
+
+        .label {
+            display: block;
+            color: #82756D;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            margin-bottom: 9px;
+        }
+
+        .value {
+            display: block;
+            color: #352820;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .available {
+            color: #16845B;
+            background: #E6F6EE;
+        }
+
+        .unavailable {
+            color: #9B3D20;
+            background: #FCE9DF;
+        }
+
+        .skills-box {
+            grid-column: 1 / -1;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 10px;
+            padding: 13px 19px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s ease;
+        }
+
+        .primary-button {
+            background: #9B3D20;
+            color: #FFFFFF;
+        }
+
+        .primary-button:hover {
+            background: #762D18;
+            transform: translateY(-1px);
+        }
+
+        .secondary-button {
+            background: #FFF0E5;
+            color: #9B3D20;
+            border: 1px solid #F0DCCF;
+        }
+
+        .secondary-button:hover {
+            background: #FFE4D2;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                margin-top: 22px;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .welcome,
+            .profile-card {
+                padding: 21px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-box {
+                grid-column: auto;
+            }
+
+            .actions .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="brand" th:href="@{/worker/dashboard}">
+            LabourLink<span style="color:#E76F32;">.</span>
+        </a>
+
+        <a class="nav-link" th:href="@{/worker/dashboard}">
+            ← Back to Dashboard
+        </a>
+    </nav>
+
+    <main class="page">
+
+        <section class="welcome">
+            <span class="welcome-tag">WORKER PROFILE</span>
+
+            <h1 th:text="'Hello, ' + ${worker.name} + '!'">
+                Hello, Worker!
+            </h1>
+
+            <p>
+                Your skills and experience help employers discover
+                the right person for their work.
+            </p>
+        </section>
+
+        <section class="profile-card">
+
+            <div class="section-heading">
+                <div class="section-icon">👤</div>
+
+                <div>
+                    <h2>Personal Information</h2>
+                    <p>Your registered details on LabourLink</p>
+                </div>
+            </div>
+
+            <div class="details-grid">
+
+                <div class="detail">
+                    <span class="label">Full Name</span>
+                    <span class="value" th:text="${worker.name}">Worker Name</span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Email Address</span>
+                    <span class="value" th:text="${worker.email}">worker@example.com</span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Phone Number</span>
+                    <span class="value" th:text="${worker.phone}">Phone Number</span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Location</span>
+                    <span class="value" th:text="${worker.location}">Location</span>
+                </div>
+
+                <div class="detail skills-box">
+                    <span class="label">Skills & Work Type</span>
+                    <span class="value" th:text="${worker.skills}">Your Skills</span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Experience</span>
+                    <span class="value"
+                        th:text="${worker.experience != null ? worker.experience + ' years' : 'Not specified'}">
+                        Experience
+                    </span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Expected Daily Wage</span>
+                    <span class="value"
+                        th:text="${worker.expectedWage != null ? '₹' + worker.expectedWage : 'Not specified'}">
+                        Expected Wage
+                    </span>
+                </div>
+
+                <div class="detail">
+                    <span class="label">Work Availability</span>
+
+                    <span class="availability" th:classappend="${worker.available} ? ' available' : ' unavailable'"
+                        th:text="${worker.available ? '● Available for Work' : '● Not Available'}">
+                        Availability
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <a class="button primary-button" th:href="@{/worker/dashboard}">
+                    ← Back to Dashboard
+                </a>
+
+                <a class="button secondary-button" th:href="@{/jobs}">
+                    Find Jobs →
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        © LabourLink · Connecting workers with opportunities.
+    </footer>
+
+</body>
+
+</html>

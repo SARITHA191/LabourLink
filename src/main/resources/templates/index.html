@@ -1,22 +1,1223 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>LabourLink</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LabourLink | Find Work. Build Your Future.</title>
+    <meta name="description"
+        content="LabourLink connects daily-wage workers with local employment opportunities and helps employers find suitable workers.">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        /* ==================================
+           LABOURLINK HOMEPAGE
+           Sunset Orange Theme
+           ================================== */
+
+        :root {
+            --home-orange: #E76F32;
+            --home-orange-dark: #C65322;
+            --home-terracotta: #9B3D20;
+            --home-cream: #FFF8F2;
+            --home-peach: #FFF0E3;
+            --home-gold: #FFB45B;
+            --home-text: #352820;
+            --home-muted: #82756D;
+        }
+
+        body {
+            background: var(--home-cream);
+            color: var(--home-text);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 17px 7%;
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid #F0DCCF;
+            box-shadow: 0 4px 18px rgba(90, 42, 20, 0.04);
+        }
+
+        .brand {
+            flex-shrink: 0;
+            font-size: 27px;
+            font-weight: 850;
+            letter-spacing: -1px;
+            color: var(--home-terracotta);
+        }
+
+        .brand span {
+            color: var(--home-orange);
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .site-nav a {
+            color: #55443A;
+            font-size: 14px;
+            font-weight: 650;
+            transition: color 0.2s ease;
+        }
+
+        .site-nav a:hover {
+            color: var(--home-orange-dark);
+        }
+
+        .site-nav .nav-cta {
+            padding: 11px 18px;
+            color: white;
+            background: var(--home-orange);
+            border-radius: 9px;
+        }
+
+        .site-nav .nav-cta:hover {
+            color: white;
+            background: var(--home-orange-dark);
+        }
+
+        /* Hero */
+
+        .home-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 55px;
+            padding: 78px 7% 85px;
+            background:
+                radial-gradient(circle at 90% 10%,
+                    rgba(255, 180, 91, 0.25),
+                    transparent 30%),
+                linear-gradient(135deg, #FFF8F2, #FFE9D6);
+        }
+
+        .hero-content {
+            max-width: 660px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding: 8px 14px;
+            color: var(--home-terracotta);
+            background: #FFE1C8;
+            border: 1px solid #F5CCAD;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .home-hero h1 {
+            margin: 0 0 22px;
+            color: #492719;
+            font-size: clamp(37px, 4.5vw, 59px);
+            line-height: 1.1;
+            letter-spacing: -1.8px;
+        }
+
+        .home-hero h1 span {
+            color: var(--home-orange-dark);
+        }
+
+        .hero-description {
+            max-width: 570px;
+            margin: 0 0 29px;
+            color: #725D50;
+            font-size: 17px;
+            line-height: 1.85;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            flex-wrap: wrap;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 9px;
+            min-height: 48px;
+            padding: 13px 20px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 750;
+            transition:
+                transform 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .home-btn-primary {
+            background: var(--home-orange);
+            color: white;
+            box-shadow: 0 7px 18px rgba(231, 111, 50, 0.2);
+        }
+
+        .home-btn-primary:hover {
+            background: var(--home-orange-dark);
+            color: white;
+        }
+
+        .home-btn-outline {
+            background: white;
+            color: var(--home-terracotta);
+            border-color: #E8C9B5;
+        }
+
+        .home-btn-outline:hover {
+            background: #FFF0E3;
+            color: var(--home-terracotta);
+        }
+
+        .hero-note {
+            margin-top: 23px;
+            color: var(--home-muted);
+            font-size: 13px;
+        }
+
+        /* Hero illustration panel */
+
+        .hero-art {
+            position: relative;
+            min-height: 365px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .art-circle {
+            position: absolute;
+            width: min(330px, 90%);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #FFD6B5, #F7A66F);
+        }
+
+        .art-card {
+            position: relative;
+            z-index: 1;
+            width: min(350px, 100%);
+            padding: 29px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 23px;
+            box-shadow: 0 22px 55px rgba(117, 53, 24, 0.16);
+        }
+
+        .art-card-top {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 24px;
+        }
+
+        .art-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+            flex-shrink: 0;
+            border-radius: 15px;
+            background: #FFE5D0;
+            font-size: 29px;
+        }
+
+        .art-card h2 {
+            margin: 0 0 4px;
+            color: #492719;
+            font-size: 19px;
+        }
+
+        .art-card-top p {
+            margin: 0;
+            color: var(--home-muted);
+            font-size: 12px;
+        }
+
+        .art-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 0;
+            border-top: 1px solid #F2E6DD;
+        }
+
+        .feature-check {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            background: #FFF0E3;
+            color: var(--home-orange-dark);
+            font-weight: 900;
+        }
+
+        .art-feature strong {
+            display: block;
+            color: #49362C;
+            font-size: 13px;
+        }
+
+        .art-feature small {
+            display: block;
+            margin-top: 3px;
+            color: var(--home-muted);
+            font-size: 11px;
+        }
+
+        .floating-note {
+            position: absolute;
+            z-index: 2;
+            right: -7px;
+            bottom: 25px;
+            padding: 14px 17px;
+            background: white;
+            border: 1px solid #F1D9C8;
+            border-radius: 13px;
+            box-shadow: 0 10px 28px rgba(117, 53, 24, 0.1);
+            color: var(--home-terracotta);
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        /* Trust strip */
+
+        .trust-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
+            padding: 29px 7%;
+            background: white;
+            border-top: 1px solid #F2E2D6;
+            border-bottom: 1px solid #F2E2D6;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+        }
+
+        .trust-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            border-radius: 13px;
+            background: #FFF0E3;
+            font-size: 22px;
+        }
+
+        .trust-item strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--home-terracotta);
+            font-size: 14px;
+        }
+
+        .trust-item span {
+            display: block;
+            color: var(--home-muted);
+            font-size: 12px;
+        }
+
+        /* Shared section styles */
+
+        .home-section {
+            padding: 75px 7%;
+        }
+
+        .section-heading {
+            max-width: 670px;
+            margin: 0 auto 42px;
+            text-align: center;
+        }
+
+        .section-label {
+            display: inline-block;
+            margin-bottom: 12px;
+            color: var(--home-orange-dark);
+            font-size: 12px;
+            font-weight: 850;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 13px;
+            color: #492719;
+            font-size: clamp(27px, 3vw, 37px);
+            letter-spacing: -0.7px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: var(--home-muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* Worker and employer cards */
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .role-card {
+            position: relative;
+            overflow: hidden;
+            padding: 34px;
+            background: white;
+            border: 1px solid #F0DCCF;
+            border-radius: 19px;
+            box-shadow: 0 10px 30px rgba(90, 42, 20, 0.05);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 17px 38px rgba(90, 42, 20, 0.1);
+        }
+
+        .role-card::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--home-orange);
+            content: "";
+        }
+
+        .employer-card::before {
+            background: var(--home-terracotta);
+        }
+
+        .role-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 65px;
+            height: 65px;
+            margin-bottom: 22px;
+            border-radius: 17px;
+            background: #FFF0E3;
+            font-size: 34px;
+        }
+
+        .role-card h3 {
+            margin: 0 0 11px;
+            color: #492719;
+            font-size: 25px;
+        }
+
+        .role-card>p {
+            margin: 0 0 20px;
+            color: var(--home-muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .role-list {
+            list-style: none;
+            margin: 0 0 26px;
+            padding: 0;
+        }
+
+        .role-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            color: #57463B;
+            font-size: 14px;
+        }
+
+        .role-list li::before {
+            content: "✓";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 21px;
+            height: 21px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #FFE5D0;
+            color: var(--home-terracotta);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .role-card .home-btn {
+            width: 100%;
+        }
+
+        /* How it works */
+
+        .how-section {
+            background: white;
+            border-top: 1px solid #F2E2D6;
+            border-bottom: 1px solid #F2E2D6;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            padding: 25px 20px;
+            text-align: center;
+            background: #FFFAF6;
+            border: 1px solid #F0DCCF;
+            border-radius: 15px;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+            margin: 0 auto 18px;
+            border-radius: 16px;
+            background: #FFE2C9;
+            color: var(--home-terracotta);
+            font-size: 23px;
+            font-weight: 850;
+        }
+
+        .step-card h3 {
+            margin: 0 0 9px;
+            color: #492719;
+            font-size: 17px;
+        }
+
+        .step-card p {
+            margin: 0;
+            color: var(--home-muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* Benefits */
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .benefit-card {
+            padding: 25px;
+            background: white;
+            border: 1px solid #F0DCCF;
+            border-radius: 15px;
+        }
+
+        .benefit-icon {
+            margin-bottom: 14px;
+            font-size: 30px;
+        }
+
+        .benefit-card h3 {
+            margin: 0 0 9px;
+            color: var(--home-terracotta);
+            font-size: 17px;
+        }
+
+        .benefit-card p {
+            margin: 0;
+            color: var(--home-muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Final call to action */
+
+        .home-cta {
+            position: relative;
+            overflow: hidden;
+            margin: 0 7% 70px;
+            padding: 49px 25px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(125deg,
+                    #9B3D20,
+                    #E76F32);
+            border-radius: 22px;
+            box-shadow: 0 14px 35px rgba(155, 61, 32, 0.16);
+        }
+
+        .home-cta h2 {
+            margin: 0 0 13px;
+            color: white;
+            font-size: clamp(26px, 3vw, 36px);
+        }
+
+        .home-cta p {
+            max-width: 650px;
+            margin: 0 auto 24px;
+            color: #FFF0E3;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .home-cta .home-btn {
+            background: white;
+            color: var(--home-terracotta);
+        }
+
+        .home-cta .home-btn:hover {
+            background: #FFF0E3;
+            color: var(--home-terracotta);
+        }
+
+        /* Footer */
+
+        .site-footer {
+            padding: 38px 7% 23px;
+            color: white;
+            background: #492719;
+        }
+
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding-bottom: 25px;
+        }
+
+        .footer-brand {
+            color: white;
+            font-size: 25px;
+            font-weight: 850;
+        }
+
+        .footer-brand span {
+            color: var(--home-gold);
+        }
+
+        .footer-description {
+            max-width: 380px;
+            margin: 10px 0 0;
+            color: #E9D6C9;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 17px;
+        }
+
+        .footer-links a {
+            color: #FFF0E3;
+            font-size: 13px;
+        }
+
+        .footer-links a:hover {
+            color: var(--home-gold);
+        }
+
+        .footer-bottom {
+            padding-top: 19px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            color: #D7BFB0;
+            font-size: 12px;
+        }
+
+        /* Responsive layout */
+
+        @media (max-width: 950px) {
+            .site-header {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .site-nav {
+                gap: 15px;
+            }
+
+            .home-hero {
+                gap: 28px;
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .trust-strip {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .home-section {
+                padding: 60px 5%;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .home-cta {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .site-header {
+                position: static;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .site-nav {
+                justify-content: flex-start;
+                gap: 13px 17px;
+                width: 100%;
+            }
+
+            .site-nav a {
+                font-size: 13px;
+            }
+
+            .home-hero {
+                grid-template-columns: 1fr;
+                padding-top: 52px;
+                padding-bottom: 45px;
+            }
+
+            .home-hero h1 {
+                font-size: clamp(35px, 9vw, 48px);
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .hero-art {
+                min-height: 330px;
+            }
+
+            .floating-note {
+                right: 0;
+                bottom: 10px;
+            }
+
+            .trust-strip {
+                grid-template-columns: 1fr;
+                gap: 22px;
+            }
+
+            .trust-item {
+                justify-content: flex-start;
+            }
+
+            .role-grid,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-card {
+                padding: 27px;
+            }
+
+            .home-section {
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .section-heading {
+                margin-bottom: 30px;
+            }
+
+            .home-cta {
+                margin-bottom: 45px;
+                padding: 37px 21px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .site-nav {
+                gap: 12px;
+            }
+
+            .site-nav .nav-cta {
+                padding: 9px 12px;
+            }
+
+            .hero-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .hero-actions .home-btn {
+                width: 100%;
+            }
+
+            .art-card {
+                padding: 22px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-main {
+                flex-direction: column;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Welcome to LabourLink</h1>
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
 
-    <p>
-        A Smart Platform for Connecting Daily-Wage Workers
-        with Local Employment Opportunities.
-    </p>
+    <header class="site-header">
+        <a th:href="@{/}" class="brand" aria-label="LabourLink Home">
+            Labour<span>Link</span>
+        </a>
 
-    <button>Find Work</button>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a th:href="@{/}">Home</a>
+            <a href="#about">About</a>
+            <a th:href="@{/jobs}">Find Jobs</a>
+            <a href="#workers">For Workers</a>
+            <a href="#employers">For Employers</a>
+            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/workers/register}" class="nav-cta">
+                Get Started →
+            </a>
+        </nav>
+    </header>
 
-    <button>Find Workers</button>
+    <main>
+
+        <!-- =========================
+             HERO SECTION
+             ========================= -->
+
+        <section class="home-hero" id="about">
+
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span>✦</span>
+                    Connecting People. Creating Opportunities.
+                </div>
+
+                <h1>
+                    Find Work.<br>
+                    Build Your <span>Future.</span>
+                </h1>
+
+                <p class="hero-description">
+                    LabourLink brings daily-wage workers and local
+                    employers together. Discover work opportunities,
+                    find skilled people, and make your next connection
+                    easier.
+                </p>
+
+                <div class="hero-actions">
+                    <a th:href="@{/workers/register}" class="home-btn home-btn-primary">
+                        I'm Looking for Work →
+                    </a>
+
+                    <a th:href="@{/employers/register}" class="home-btn home-btn-outline">
+                        I Want to Hire
+                    </a>
+                </div>
+
+                <p class="hero-note">
+                    Simple registration · Local opportunities · Easier connections
+                </p>
+            </div>
+
+            <div class="hero-art" aria-label="LabourLink service highlights">
+                <div class="art-circle"></div>
+
+                <div class="art-card">
+                    <div class="art-card-top">
+                        <div class="art-icon">👷</div>
+                        <div>
+                            <h2>Work Meets Opportunity</h2>
+                            <p>A better way to connect locally</p>
+                        </div>
+                    </div>
+
+                    <div class="art-feature">
+                        <div class="feature-check">✓</div>
+                        <div>
+                            <strong>Find Local Jobs</strong>
+                            <small>Explore available work opportunities</small>
+                        </div>
+                    </div>
+
+                    <div class="art-feature">
+                        <div class="feature-check">✓</div>
+                        <div>
+                            <strong>Connect with Workers</strong>
+                            <small>Discover people with relevant skills</small>
+                        </div>
+                    </div>
+
+                    <div class="art-feature">
+                        <div class="feature-check">✓</div>
+                        <div>
+                            <strong>Track Applications</strong>
+                            <small>Check application decisions</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-note">
+                    🧡 Local talent, local opportunities
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================
+             PLATFORM BENEFITS STRIP
+             ========================= -->
+
+        <section class="trust-strip" aria-label="LabourLink features">
+
+            <div class="trust-item">
+                <div class="trust-icon">🤝</div>
+                <div>
+                    <strong>Local Connections</strong>
+                    <span>Bring workers and employers together.</span>
+                </div>
+            </div>
+
+            <div class="trust-item">
+                <div class="trust-icon">📍</div>
+                <div>
+                    <strong>Location-Based Matching</strong>
+                    <span>Explore opportunities in your area.</span>
+                </div>
+            </div>
+
+            <div class="trust-item">
+                <div class="trust-icon">📋</div>
+                <div>
+                    <strong>Application Tracking</strong>
+                    <span>Follow your application status.</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================
+             WORKER AND EMPLOYER CARDS
+             ========================= -->
+
+        <section class="home-section">
+
+            <div class="section-heading">
+                <span class="section-label">Get Started</span>
+
+                <h2>What brings you to LabourLink?</h2>
+
+                <p>
+                    Whether you're searching for work or hiring workers,
+                    choose the path that suits your needs.
+                </p>
+            </div>
+
+            <div class="role-grid">
+
+                <!-- Worker card -->
+
+                <article class="role-card" id="workers">
+                    <div class="role-icon">👷</div>
+
+                    <h3>For Workers</h3>
+
+                    <p>
+                        Looking for daily-wage work? Create your profile
+                        and explore job opportunities that match your
+                        skills and preferred location.
+                    </p>
+
+                    <ul class="role-list">
+                        <li>Create your worker profile</li>
+                        <li>Discover local job opportunities</li>
+                        <li>Apply for available jobs</li>
+                        <li>Track application decisions</li>
+                    </ul>
+
+                    <a th:href="@{/workers/register}" class="home-btn home-btn-primary">
+                        Register as Worker →
+                    </a>
+                </article>
+
+                <!-- Employer card -->
+
+                <article class="role-card employer-card" id="employers">
+                    <div class="role-icon">🏢</div>
+
+                    <h3>For Employers</h3>
+
+                    <p>
+                        Need reliable workers for construction, farming,
+                        or other daily-wage work? Create an employer
+                        account and post your requirements.
+                    </p>
+
+                    <ul class="role-list">
+                        <li>Create your employer profile</li>
+                        <li>Post local job opportunities</li>
+                        <li>Find workers by skills and location</li>
+                        <li>Review applicants and update decisions</li>
+                    </ul>
+
+                    <a th:href="@{/employers/register}" class="home-btn home-btn-primary">
+                        Register as Employer →
+                    </a>
+                </article>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             HOW IT WORKS
+             ========================= -->
+
+        <section class="home-section how-section">
+
+            <div class="section-heading">
+                <span class="section-label">Simple Process</span>
+
+                <h2>How LabourLink Works</h2>
+
+                <p>
+                    Get started with a few simple steps, whether you're
+                    finding work or looking for workers.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+
+                <article class="step-card">
+                    <div class="step-number">01</div>
+                    <h3>Create an Account</h3>
+                    <p>
+                        Register as a worker or employer using your
+                        account details.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <div class="step-number">02</div>
+                    <h3>Build Your Profile</h3>
+                    <p>
+                        Add your skills, location, or employment
+                        requirements.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Connect</h3>
+                    <p>
+                        Workers explore jobs while employers find
+                        suitable applicants.
+                    </p>
+                </article>
+
+                <article class="step-card">
+                    <div class="step-number">04</div>
+                    <h3>Track Progress</h3>
+                    <p>
+                        Follow application decisions through your
+                        account.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             WHY LABOURLINK
+             ========================= -->
+
+        <section class="home-section">
+
+            <div class="section-heading">
+                <span class="section-label">Why LabourLink?</span>
+
+                <h2>Designed Around Local Employment</h2>
+
+                <p>
+                    A straightforward platform designed to make
+                    finding work and hiring workers more convenient.
+                </p>
+            </div>
+
+            <div class="benefits-grid">
+
+                <article class="benefit-card">
+                    <div class="benefit-icon">📍</div>
+                    <h3>Location-Based Opportunities</h3>
+                    <p>
+                        Explore jobs and worker profiles using
+                        relevant location information.
+                    </p>
+                </article>
+
+                <article class="benefit-card">
+                    <div class="benefit-icon">🛠️</div>
+                    <h3>Skills Matter</h3>
+                    <p>
+                        Help connect job requirements with the
+                        skills workers offer.
+                    </p>
+                </article>
+
+                <article class="benefit-card">
+                    <div class="benefit-icon">📋</div>
+                    <h3>Clear Application Status</h3>
+                    <p>
+                        Workers can check their applications and
+                        see the decisions recorded by employers.
+                    </p>
+                </article>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             CALL TO ACTION
+             ========================= -->
+
+        <section class="home-cta">
+            <h2>Your Next Opportunity Starts Here.</h2>
+
+            <p>
+                Join LabourLink to explore local work opportunities
+                or connect with workers for your next job requirement.
+            </p>
+
+            <div class="hero-actions" style="justify-content: center;">
+                <a th:href="@{/workers/register}" class="home-btn">
+                    Join as a Worker →
+                </a>
+
+                <a th:href="@{/employers/register}" class="home-btn">
+                    Join as an Employer →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="site-footer" id="contact">
+
+        <div class="footer-main">
+
+            <div>
+                <a th:href="@{/}" class="footer-brand">
+                    Labour<span>Link</span>
+                </a>
+
+                <p class="footer-description">
+                    Connecting daily-wage workers with local
+                    employment opportunities and helping employers
+                    discover suitable workers.
+                </p>
+            </div>
+
+            <nav class="footer-links" aria-label="Footer navigation">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/jobs}">Find Jobs</a>
+                <a th:href="@{/workers/register}">Worker Registration</a>
+                <a th:href="@{/employers/register}">Employer Registration</a>
+                <a th:href="@{/login}">Login</a>
+            </nav>
+
+        </div>
+
+        <div class="footer-bottom">
+            © <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+            LabourLink. Connecting people with opportunities.
+        </div>
+
+    </footer>
 
 </body>
 

@@ -1,47 +1,410 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Worker Registration - LabourLink</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 35px 18px;
+            font-family: Arial, sans-serif;
+            color: #352820;
+            background:
+                radial-gradient(circle at top left, #FFEBDD, transparent 45%),
+                linear-gradient(135deg, #FFF8F2, #FFF3E8);
+            min-height: 100vh;
+        }
+
+        .page-header {
+            max-width: 850px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 27px;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.7px;
+        }
+
+        .brand span {
+            color: #E76F32;
+        }
+
+        .back-link {
+            color: #9B3D20;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            background: #FFFFFF;
+            border: 1px solid #F4E2D5;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 12px 38px rgba(155, 61, 32, 0.09);
+        }
+
+        .form-header {
+            text-align: center;
+            padding: 35px 25px 28px;
+            background: linear-gradient(135deg, #FFF0E5, #FFFAF6);
+            border-bottom: 1px solid #F4E2D5;
+        }
+
+        .icon-circle {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #FFE2CC;
+            font-size: 29px;
+        }
+
+        .form-header h1 {
+            margin: 0 0 10px;
+            font-size: clamp(25px, 4vw, 32px);
+            color: #76351F;
+        }
+
+        .form-header p {
+            margin: 0;
+            color: #82756D;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .form-content {
+            padding: 30px 35px 35px;
+        }
+
+        .section-heading {
+            font-size: 16px;
+            color: #9B3D20;
+            margin: 0 0 20px;
+            padding-bottom: 11px;
+            border-bottom: 1px solid #F3E5DB;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 22px;
+            row-gap: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #49362B;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .required {
+            color: #C65322;
+        }
+
+        .form-group input {
+            display: block;
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #EAD9CC;
+            border-radius: 9px;
+            background: #FFFCF9;
+            color: #352820;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #E76F32;
+            box-shadow: 0 0 0 3px rgba(231, 111, 50, 0.12);
+            background: #FFFFFF;
+        }
+
+        .form-group input::placeholder {
+            color: #B3A39A;
+        }
+
+        .hint {
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            line-height: 1.5;
+            color: #8A7C72;
+        }
+
+        .availability-box {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 16px;
+            background: #F5FBF5;
+            border: 1px solid #DCEBDD;
+            border-radius: 10px;
+            margin: 5px 0 24px;
+        }
+
+        .availability-box input {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            accent-color: #16845B;
+            cursor: pointer;
+        }
+
+        .availability-box label {
+            cursor: pointer;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #285A3B;
+        }
+
+        .availability-box p {
+            margin: 5px 0 0;
+            color: #65816C;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #E98246, #D96530);
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(217, 101, 48, 0.18);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(217, 101, 48, 0.25);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 22px;
+            color: #82756D;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .form-footer a {
+            color: #9B3D20;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .bottom-note {
+            text-align: center;
+            margin: 20px 0 0;
+            color: #9A887C;
+            font-size: 11px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .page-header {
+                margin-bottom: 18px;
+            }
+
+            .brand {
+                font-size: 24px;
+            }
+
+            .form-header {
+                padding: 28px 18px 24px;
+            }
+
+            .form-content {
+                padding: 25px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Worker Registration</h1>
+    <header class="page-header">
+        <a class="brand" th:href="@{/}">
+            Labour<span>Link</span>
+        </a>
 
-    <form th:action="@{/workers/register}" th:object="${worker}" method="post">
+        <a class="back-link" th:href="@{/}">
+            ← Back to Home
+        </a>
+    </header>
 
-        <label>Name:</label>
-        <input type="text" th:field="*{name}" required>
-        <br><br>
+    <main class="container">
 
-        <label>Phone:</label>
-        <input type="text" th:field="*{phone}" required>
-        <br><br>
+        <div class="form-header">
+            <div class="icon-circle">👷</div>
+            <h1>Join LabourLink</h1>
+            <p>
+                Create your worker profile and connect with local job opportunities.
+                Your next opportunity could be just around the corner!
+            </p>
+        </div>
 
-        <label>Location:</label>
-        <input type="text" th:field="*{location}" required>
-        <br><br>
+        <div class="form-content">
 
-        <label>Skills:</label>
-        <input type="text" th:field="*{skills}" required>
-        <br><br>
+            <form th:action="@{/workers/register}" th:object="${worker}" method="post">
 
-        <label>Experience (years):</label>
-        <input type="number" th:field="*{experience}" min="0">
-        <br><br>
+                <h2 class="section-heading">Your Personal Details</h2>
 
-        <label>Expected Daily Wage:</label>
-        <input type="number" th:field="*{expectedWage}" min="0">
-        <br><br>
+                <div class="form-grid">
 
-        <label>Available Today:</label>
-        <input type="checkbox" th:field="*{available}">
-        <br><br>
+                    <div class="form-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="name" th:field="*{name}" placeholder="Enter your full name"
+                            autocomplete="name" required>
+                    </div>
 
-        <button type="submit">Register</button>
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" th:field="*{phone}" placeholder="Enter phone number"
+                            autocomplete="tel" required>
+                    </div>
 
-    </form>
+                    <div class="form-group full-width">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address"
+                            autocomplete="email" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="password">Create Password <span class="required">*</span></label>
+                        <input type="password" id="password" th:field="*{password}"
+                            placeholder="Create a secure password" minlength="8" autocomplete="new-password" required>
+                        <span class="hint">Use at least 8 characters for your password.</span>
+                    </div>
+
+                </div>
+
+                <h2 class="section-heading" style="margin-top: 18px;">
+                    Work Profile
+                </h2>
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+                        <label for="location">Your Location <span class="required">*</span></label>
+                        <input type="text" id="location" th:field="*{location}" placeholder="Enter your town or village"
+                            required>
+                        <span class="hint">
+                            Add your location so nearby employers can find you.
+                        </span>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="skills">Skills <span class="required">*</span></label>
+                        <input type="text" id="skills" th:field="*{skills}"
+                            placeholder="e.g. Construction, Painting, Farming" required>
+                        <span class="hint">
+                            List your main skills, separated by commas.
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Experience (Years) <span class="required">*</span></label>
+                        <input type="number" id="experience" th:field="*{experience}" min="0" placeholder="e.g. 2"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expectedWage">Expected Daily Wage (₹) <span class="required">*</span></label>
+                        <input type="number" id="expectedWage" th:field="*{expectedWage}" min="0" placeholder="e.g. 600"
+                            required>
+                    </div>
+
+                </div>
+
+                <div class="availability-box">
+                    <input type="checkbox" id="available" th:field="*{available}">
+
+                    <div>
+                        <label for="available">I am currently available for work</label>
+                        <p>
+                            Enable this option to show employers that you are looking for work.
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Create Worker Account →
+                </button>
+
+            </form>
+
+            <div class="form-footer">
+                Already have an account?
+                <a th:href="@{/login}">Login here</a>
+                <br>
+                Registering as an employer?
+                <a th:href="@{/employers/register}">Register here</a>
+            </div>
+
+        </div>
+    </main>
+
+    <p class="bottom-note">
+        LabourLink · Connecting local workers with opportunities
+    </p>
 
 </body>
 

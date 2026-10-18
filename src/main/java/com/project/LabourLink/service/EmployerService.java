@@ -15,11 +15,19 @@ public class EmployerService {
         this.employerRepository = employerRepository;
     }
 
+    // Save a new employer
     public Employer saveEmployer(Employer employer) {
         return employerRepository.save(employer);
     }
 
+    // Get all employers
     public List<Employer> getAllEmployers() {
         return employerRepository.findAll();
+    }
+
+    // Get employer by ID
+    public Employer getEmployerById(Long id) {
+        return employerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employer not found with ID: " + id));
     }
 }

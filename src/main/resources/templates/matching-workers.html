@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Workers | LabourLink</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #FFF8F2;
+            color: #352820;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 17px 7%;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F0DCCF;
+        }
+
+        .brand {
+            color: #9B3D20;
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #762D18;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px 40px;
+        }
+
+        .hero {
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #F5D2BB;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #FFE4D2, #FFF0DE);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #FFFFFF;
+            color: #9B3D20;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .hero h1 {
+            margin: 15px 0 8px;
+            color: #762D18;
+            font-size: clamp(26px, 4vw, 34px);
+        }
+
+        .hero p {
+            margin: 0;
+            color: #76594A;
+            line-height: 1.7;
+        }
+
+        .job-card {
+            padding: 25px;
+            margin-bottom: 30px;
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 17px;
+            box-shadow: 0 8px 24px rgba(155, 61, 32, .06);
+        }
+
+        .job-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .job-icon {
+            display: grid;
+            place-items: center;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: #FFF0E5;
+            font-size: 24px;
+        }
+
+        .job-heading h2 {
+            margin: 0 0 6px;
+            color: #762D18;
+            font-size: 21px;
+        }
+
+        .job-heading p {
+            margin: 0;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        .job-details {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .detail {
+            padding: 15px;
+            min-width: 0;
+            background: #FFFAF6;
+            border: 1px solid #F3E4D9;
+            border-radius: 12px;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #82756D;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .detail-value {
+            color: #352820;
+            font-size: 15px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .wage {
+            color: #16845B;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            color: #762D18;
+            font-size: 22px;
+        }
+
+        .section-heading p {
+            margin: 6px 0 0;
+            color: #82756D;
+            font-size: 13px;
+        }
+
+        .workers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .worker-card {
+            padding: 22px;
+            min-width: 0;
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 17px;
+            box-shadow: 0 6px 18px rgba(155, 61, 32, .05);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(155, 61, 32, .09);
+        }
+
+        .worker-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            display: grid;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            border-radius: 16px;
+            background: #FFE4D2;
+            color: #9B3D20;
+            font-size: 23px;
+        }
+
+        .worker-header h3 {
+            margin: 0 0 6px;
+            color: #352820;
+            font-size: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .worker-header p {
+            margin: 0;
+            color: #82756D;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .availability {
+            display: inline-block;
+            margin-left: auto;
+            padding: 7px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .available {
+            background: #E4F6EB;
+            color: #16845B;
+        }
+
+        .unavailable {
+            background: #FCE8E5;
+            color: #C0392B;
+        }
+
+        .worker-details {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 11px;
+        }
+
+        .worker-detail {
+            padding: 13px;
+            min-width: 0;
+            background: #FFFAF6;
+            border: 1px solid #F3E4D9;
+            border-radius: 10px;
+        }
+
+        .worker-detail .detail-label {
+            margin-bottom: 6px;
+        }
+
+        .worker-detail .detail-value {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .skills {
+            grid-column: 1 / -1;
+        }
+
+        .empty-card {
+            padding: 45px 20px;
+            background: #FFFFFF;
+            border: 1px solid #F0DCCF;
+            border-radius: 17px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            margin-bottom: 12px;
+            font-size: 45px;
+        }
+
+        .empty-card h3 {
+            margin: 0 0 9px;
+            color: #762D18;
+        }
+
+        .empty-card p {
+            margin: 0;
+            color: #82756D;
+            line-height: 1.7;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border: 1px solid #F0DCCF;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .primary-button {
+            background: #9B3D20;
+            border-color: #9B3D20;
+            color: #FFFFFF;
+        }
+
+        .primary-button:hover {
+            background: #762D18;
+        }
+
+        .secondary-button {
+            background: #FFF0E5;
+            color: #9B3D20;
+        }
+
+        .secondary-button:hover {
+            background: #FFE4D2;
+        }
+
+        footer {
+            padding: 22px;
+            color: #82756D;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .job-details {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .workers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                margin-top: 22px;
+                padding: 0 14px 30px;
+            }
+
+            .hero,
+            .job-card,
+            .worker-card {
+                padding: 20px;
+            }
+
+            .job-details,
+            .worker-details {
+                grid-template-columns: 1fr;
+            }
+
+            .skills {
+                grid-column: auto;
+            }
+
+            .worker-header {
+                flex-wrap: wrap;
+            }
+
+            .availability {
+                margin-left: 0;
+            }
+
+            .actions .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a class="brand" th:href="@{/employer/dashboard}">
+            LabourLink<span style="color:#E76F32;">.</span>
+        </a>
+
+        <a class="nav-link" th:href="@{/employer/dashboard}">
+            ← Back to Dashboard
+        </a>
+    </nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <span class="tag">SMART WORKER MATCHING</span>
+            <h1>Matching Workers</h1>
+            <p>
+                Discover workers whose skills and location match
+                your job requirements.
+            </p>
+        </section>
+
+        <section class="job-card">
+
+            <div class="job-heading">
+                <div class="job-icon">🧰</div>
+
+                <div>
+                    <h2 th:text="${job.workType}">Work Type</h2>
+                    <p>Job requirements and daily wage</p>
+                </div>
+            </div>
+
+            <div class="job-details">
+
+                <div class="detail">
+                    <span class="detail-label">Location</span>
+                    <span class="detail-value" th:text="${job.location}">Location</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Daily Wage</span>
+                    <span class="detail-value wage" th:text="'₹' + ${job.wage}">₹700</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Work Date</span>
+                    <span class="detail-value" th:text="${job.workDate}">Work Date</span>
+                </div>
+
+                <div class="detail">
+                    <span class="detail-label">Workers Required</span>
+                    <span class="detail-value" th:text="${job.workersRequired}">3</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="section-heading">
+                <div>
+                    <h2>Suitable Workers</h2>
+                    <p>Review each worker's experience, skills and availability.</p>
+                </div>
+            </div>
+
+            <div class="workers-grid">
+
+                <article class="worker-card" th:each="worker : ${workers}">
+
+                    <div class="worker-header">
+
+                        <div class="avatar">👷</div>
+
+                        <div style="min-width:0; flex:1;">
+                            <h3 th:text="${worker.name}">Worker Name</h3>
+                            <p th:text="${worker.location}">Worker Location</p>
+                        </div>
+
+                        <span class="availability" th:classappend="${worker.available} ? ' available' : ' unavailable'"
+                            th:text="${worker.available ? '● Available' : '● Unavailable'}">
+                            Available
+                        </span>
+
+                    </div>
+
+                    <div class="worker-details">
+
+                        <div class="worker-detail">
+                            <span class="detail-label">Phone</span>
+                            <span class="detail-value" th:text="${worker.phone}">Phone</span>
+                        </div>
+
+                        <div class="worker-detail">
+                            <span class="detail-label">Experience</span>
+                            <span class="detail-value"
+                                th:text="${worker.experience != null ? worker.experience + ' years' : 'Not specified'}">
+                                Experience
+                            </span>
+                        </div>
+
+                        <div class="worker-detail skills">
+                            <span class="detail-label">Skills</span>
+                            <span class="detail-value" th:text="${worker.skills}">Skills</span>
+                        </div>
+
+                        <div class="worker-detail">
+                            <span class="detail-label">Expected Daily Wage</span>
+                            <span class="detail-value wage"
+                                th:text="${worker.expectedWage != null ? '₹' + worker.expectedWage : 'Not specified'}">
+                                Expected Wage
+                            </span>
+                        </div>
+
+                        <div class="worker-detail">
+                            <span class="detail-label">Work Availability</span>
+                            <span class="detail-value" th:text="${worker.available ? 'Available' : 'Not available'}">
+                                Availability
+                            </span>
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <div class="empty-card" th:if="${#lists.isEmpty(workers)}">
+
+                <div class="empty-icon">🔎</div>
+                <h3>No suitable workers found</h3>
+                <p>
+                    No workers currently match this job's skills and location.
+                    You can review your job details or check again later.
+                </p>
+
+            </div>
+
+        </section>
+
+        <div class="actions">
+            <a class="button primary-button" th:href="@{/jobs}">
+                ← Back to Jobs
+            </a>
+
+            <a class="button secondary-button" th:href="@{/employer/dashboard}">
+                Employer Dashboard
+            </a>
+        </div>
+
+    </main>
+
+    <footer>
+        © LabourLink · Connecting workers with opportunities.
+    </footer>
+
+</body>
+
+</html>

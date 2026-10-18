@@ -3,7 +3,6 @@ package com.project.LabourLink.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "employers")
 public class Employer {
 
     @Id
@@ -17,6 +16,11 @@ public class Employer {
     private String location;
 
     private String organizationName;
+
+    @Column(unique = true)
+    private String email;
+
+    private String password;
 
     public Employer() {
     }
@@ -59,5 +63,21 @@ public class Employer {
 
     public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
